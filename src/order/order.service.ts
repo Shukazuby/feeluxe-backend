@@ -218,7 +218,7 @@ export class OrderService {
     if (!order) {
       throw new NotFoundException('Order not found.');
     }
-    if (order.userId !== userId) {
+    if (order.userId !== userId.toString()) {
       throw new ForbiddenException('You are not authorized to pay for this order.');
     }
     if (order.paymentStatus === 'paid') {
