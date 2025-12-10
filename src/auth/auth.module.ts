@@ -14,8 +14,8 @@ import { CustomerModule } from 'src/customer/customer.module';
     ConfigModule.forRoot({ isGlobal: true }),
     PassportModule,
     JwtModule.register({
-      secret: process.env.JWT_SECRET || 'feeluxe-secret',
-      signOptions: { expiresIn: '7d' },
+      secret: process.env.JWT_SECRET ,
+      signOptions: { expiresIn: '24h' },
     }),
     MongooseModule.forFeature([{ name: Customer.name, schema: CustomerSchema }]),
     CustomerModule,

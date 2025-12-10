@@ -10,6 +10,7 @@ import { ContactModule } from './contact/contact.module';
 import { AuthModule } from './auth/auth.module';
 import { CartModule } from './cart/cart.module';
 import { CartItemModule } from './cart-item/cart-item.module';
+import { NewsletterModule } from './newsletter/newsletter.module';
 dotenv.config();
 @Module({
   imports: [
@@ -21,6 +22,7 @@ dotenv.config();
     AuthModule,
     CartModule,
     CartItemModule,
+    NewsletterModule,
   ],
   controllers: [AppController],
   providers: [AppService],
