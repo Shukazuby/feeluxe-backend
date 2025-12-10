@@ -77,7 +77,7 @@ export class CustomerService {
                       <li>Checkout securely with Paystack.</li>
                     </ul>
                   </div>
-                  <a href="https://feeluxe.ng" style="display:inline-block;margin-top:6px;background: #F9A8D4;color:#fff;text-decoration:none;font-weight:800;padding:13px 18px;border-radius:12px;box-shadow:0 10px 24px rgb(232, 162, 197);">
+                  <a href="https://feeluxe-frontend.vercel.app" style="display:inline-block;margin-top:6px;background: #F9A8D4;color:#fff;text-decoration:none;font-weight:800;padding:13px 18px;border-radius:12px;box-shadow:0 10px 24px rgb(232, 162, 197);">
                     Start exploring
                   </a>
                 </td>
