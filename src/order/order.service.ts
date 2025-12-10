@@ -9,6 +9,7 @@ import { Product, ProductDocument } from 'src/product/entities/product.entity';
 import { Customer, CustomerDocument } from 'src/customer/entities/customer.entity';
 import { CartItem, CartItemDocument } from 'src/cart-item/entities/cart-item.entity';
 import * as crypto from 'crypto';
+import { ShippingService } from 'src/shipping/shipping.service';
 
 @Injectable()
 export class OrderService {
@@ -17,6 +18,7 @@ export class OrderService {
     @InjectModel(Product.name) private readonly productModel: Model<ProductDocument>,
     @InjectModel(Customer.name) private readonly customerModel: Model<CustomerDocument>,
     @InjectModel(CartItem.name) private readonly cartItemModel: Model<CartItemDocument>,
+    private readonly shippingService: ShippingService,
   ) {}
 
   async create(userId: string, payload: CreateOrderDto): Promise<BaseResponseTypeDTO> {
@@ -345,13 +347,8 @@ export class OrderService {
       throw new NotFoundException('No cart items found');
     }
 
-    // Calculate shipping based on number of items
-    // Base shipping: 2500 NGN
-    // Additional items: 500 NGN per item after the first
-    const baseShipping = 2500;
-    const additionalItemShipping = 500;
-    const numberOfItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
-    const shippingCost = baseShipping + (numberOfItems > 1 ? (numberOfItems - 1) * additionalItemShipping : 0);
+    // Dynamic shipping: pull latest configured cost
+    const shippingCost = await this.shippingService.getCurrentCostValue();
 
     return {
       data: { shippingCost },

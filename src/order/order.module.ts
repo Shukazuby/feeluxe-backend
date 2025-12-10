@@ -8,6 +8,7 @@ import { Customer, CustomerSchema } from 'src/customer/entities/customer.entity'
 import { CustomerModule } from 'src/customer/customer.module';
 import { CartItem, CartItemSchema } from 'src/cart-item/entities/cart-item.entity';
 import { CartItemModule } from 'src/cart-item/cart-item.module';
+import { ShippingModule } from 'src/shipping/shipping.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { CartItemModule } from 'src/cart-item/cart-item.module';
     ]),
     CustomerModule,
     CartItemModule,
+    ShippingModule,
   ],
   controllers: [OrderController],
   providers: [OrderService],
