@@ -63,11 +63,15 @@ export class OrderService {
       } as OrderItem);
     }
 
+    // Add shipping cost to total amount if provided
+    const shippingCost = payload.shippingCost || 0;
+    const finalTotalAmount = totalAmount + shippingCost;
+
     const orderNumber = `FLX${generateUniqueKey(5)}`;
     const order = new this.orderModel({
       orderNumber,
       items: orderItems,
-      totalAmount,
+      totalAmount: finalTotalAmount,
       status: 'pending',
       paymentStatus: 'pending',
       userId: customer._id.toString(),
@@ -101,8 +105,8 @@ export class OrderService {
       throw new NotFoundException('Customer not found');
     }
   
-    // Match orders to this customer
-    query.userId = customer._id;
+    // Match orders to this customer (userId is stored as string, so convert to string for comparison)
+    query.userId = customer._id.toString();
   
     // Filter by status
     if (filters.status) {
@@ -158,7 +162,11 @@ export class OrderService {
       throw new NotFoundException('Order not found.');
     }
 
-    if (order.userId !== userId) {
+    // Convert both to strings for comparison (userId from JWT might be ObjectId, order.userId is string)
+    const userIdStr = userId?.toString();
+    const orderUserIdStr = order.userId?.toString();
+    
+    if (orderUserIdStr !== userIdStr) {
       throw new ForbiddenException('You are not authorized to access this order.');
     }
 
@@ -313,6 +321,44 @@ export class OrderService {
 
     order.paymentStatus = 'paid';
     await order.save();
+  }
+
+  async calculateShippingEstimate(userId: string, cartItemIds: string[]): Promise<BaseResponseTypeDTO> {
+    if (!cartItemIds || cartItemIds.length === 0) {
+      return {
+        data: { shippingCost: 0 },
+        success: true,
+        code: HttpStatus.OK,
+        message: 'Shipping estimate calculated',
+      };
+    }
+
+    // Verify cart items belong to user
+    const cartItems = await this.cartItemModel
+      .find({
+        _id: { $in: cartItemIds.map((id) => new Types.ObjectId(id)) },
+        customerId: new Types.ObjectId(userId),
+      })
+      .lean();
+
+    if (!cartItems.length) {
+      throw new NotFoundException('No cart items found');
+    }
+
+    // Calculate shipping based on number of items
+    // Base shipping: 2500 NGN
+    // Additional items: 500 NGN per item after the first
+    const baseShipping = 2500;
+    const additionalItemShipping = 500;
+    const numberOfItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    const shippingCost = baseShipping + (numberOfItems > 1 ? (numberOfItems - 1) * additionalItemShipping : 0);
+
+    return {
+      data: { shippingCost },
+      success: true,
+      code: HttpStatus.OK,
+      message: 'Shipping estimate calculated',
+    };
   }
 }
 

@@ -3,6 +3,7 @@ import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagg
 import { BaseResponseTypeDTO } from 'src/utils';
 import { CreateOrderDto, OrderFilterDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { ShippingEstimateDto } from './dto/shipping-estimate.dto';
 import { OrderService } from './order.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
@@ -78,6 +79,15 @@ export class OrderController {
       code: HttpStatus.OK,
       message: 'Webhook processed',
     };
+  }
+
+  @Post('shipping/estimate')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get shipping cost estimate for cart items' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Shipping estimate calculated' })
+  async getShippingEstimate(@Body() payload: ShippingEstimateDto, @Request() req): Promise<BaseResponseTypeDTO> {
+    return this.orderService.calculateShippingEstimate(req.user.id, payload.cartItemIds);
   }
 }
 

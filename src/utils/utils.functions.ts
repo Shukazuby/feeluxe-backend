@@ -28,7 +28,7 @@ export const generateUniqueKey = (length = 5): string => {
       });
   
       const info = await transporter.sendMail({
-        from: `"Wale Grills" <${process.env.EMAIL_ADMIN}>`,
+        from: `"Feeluxe.ng" <${process.env.EMAIL_ADMIN}>`,
         to: recipientEmail,
         subject,
         html,

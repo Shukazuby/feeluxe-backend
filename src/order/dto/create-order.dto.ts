@@ -10,6 +10,9 @@ export class CreateOrderDto {
 
   @ApiProperty({ required: false, description: 'Optional note from customer' })
   notes?: string;
+
+  @ApiProperty({ required: false, description: 'Shipping cost to add to order total', example: 2500 })
+  shippingCost?: number;
 }
 
 export class OrderFilterDto {
