@@ -89,6 +89,13 @@ export class ProductController {
     return result;
   }
 
+  @Get('search')
+  @ApiOperation({ summary: 'Search products by keyword' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Search results' })
+  async search(@Query() filters: PaginationFilterDTO): Promise<BaseResponseTypeDTO> {
+    return this.productService.findByProductTypes(filters);
+  }
+
   @Get('featured/list')
   @ApiOperation({ summary: 'Frontend: get featured products' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Featured products' })
