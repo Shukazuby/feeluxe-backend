@@ -109,5 +109,14 @@ export class CustomerController {
   ): Promise<BaseResponseTypeDTO> {
     return this.customerService.removeFromWishlist(req.user.id, payload.productId);
   }
+
+  @Delete('me')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete current customer account' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Account deleted' })
+  deleteAccount(@Request() req): Promise<BaseResponseTypeDTO> {
+    return this.customerService.deleteAccount(req.user.id);
+  }
 }
 

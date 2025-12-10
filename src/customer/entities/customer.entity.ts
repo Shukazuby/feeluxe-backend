@@ -34,6 +34,12 @@ export class Customer {
   @Prop()
   passwordHash?: string;
 
+  @Prop()
+  resetPasswordCode?: string;
+
+  @Prop()
+  resetPasswordCodeExpires?: Date;
+
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Product' }], default: [] })
   wishlist: Types.ObjectId[];
 
