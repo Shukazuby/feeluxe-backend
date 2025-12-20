@@ -32,6 +32,10 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    // Update last login
+    customer.lastLogin = new Date();
+    await customer.save();
+
     const token = this.signToken(customer._id.toString());
 
     return {
@@ -146,6 +150,7 @@ export class AuthService {
       phone: customer.phone,
       address: customer.address,
       avatarUrl: customer.avatarUrl,
+      lastLogin: customer.lastLogin,
     };
   }
 

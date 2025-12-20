@@ -46,6 +46,9 @@ export class Customer {
   @Prop({ type: [CartItemSchema], default: [] })
   cart: CartItem[];
 
+  @Prop()
+  lastLogin?: Date;
+
   createdAt: Date;
   updatedAt: Date;
 }

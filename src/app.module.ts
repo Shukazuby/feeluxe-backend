@@ -13,6 +13,7 @@ import { CartItemModule } from './cart-item/cart-item.module';
 import { NewsletterModule } from './newsletter/newsletter.module';
 import { ShippingModule } from './shipping/shipping.module';
 import { AdminModule } from './admin/admin.module';
+import { AuditLogModule } from './audit-log/audit-log.module';
 dotenv.config();
 @Module({
   imports: [
@@ -27,6 +28,7 @@ dotenv.config();
     NewsletterModule,
     ShippingModule,
     AdminModule,
+    AuditLogModule,
   ],
   controllers: [AppController],
   providers: [AppService],
